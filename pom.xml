@@ -48,6 +48,11 @@
             <artifactId>server</artifactId>
             <version>1.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>waltz-controls.magix</groupId>
+            <artifactId>java-client</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -164,12 +169,19 @@
     </profiles>
 
     <repositories>
-      <repository>
+        <repository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <id>github-hzg</id>
             <url>https://maven.pkg.github.com/hereon-wpi/*</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>github-waltz</id>
+            <url>https://maven.pkg.github.com/waltz-controls/*</url>
         </repository>
     </repositories>
 </project>
