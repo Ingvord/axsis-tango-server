@@ -21,4 +21,4 @@ ENV CTRL2=1.1.1.2:1234
 
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["/bin/bash", "-c", "java -jar -server -DOAPort=$OAPORT -DTANGO_HOST=$TANGO_HOST -DMAGIX_HOST=$MAGIX_HOST -Dctrl1=$CTRL1 -Dctrl2=$CTRL2 /app/bin/run.jar"]
+CMD ["/bin/bash", "-c", "java -server -DOAPort=$OAPORT -DTANGO_HOST=$TANGO_HOST -DMAGIX_HOST=$MAGIX_HOST -DCTRL1=$CTRL1 -DCTRL2=$CTRL2 -jar /app/bin/run.jar virtual"]
