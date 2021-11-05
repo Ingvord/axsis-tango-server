@@ -4,7 +4,7 @@
 
     <groupId>com.github.ingvord.axsis</groupId>
     <artifactId>AxsisTangoServer</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
 
     <properties>
         <slf4j-api.version>1.7.5</slf4j-api.version>
@@ -17,7 +17,7 @@
         <connection>scm:git:git@github.com:${github.organization}/${github.repo}.git</connection>
         <developerConnection>scm:git:git@github.com:${github.organization}/${github.repo}.git</developerConnection>
         <url>https://github.com/${github.organization}/${github.repo}</url>
-        <tag>HEAD</tag>
+        <tag>AxsisTangoServer-0.2</tag>
     </scm>
 
     <dependencies>
