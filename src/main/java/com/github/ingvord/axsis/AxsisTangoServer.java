@@ -2,6 +2,7 @@ package com.github.ingvord.axsis;
 
 import magix.SseMagixClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.plugins.providers.jackson.ResteasyJackson2Provider;
 import org.tango.server.ServerManager;
 
 import javax.ws.rs.client.Client;
@@ -15,7 +16,9 @@ public class AxsisTangoServer {
     public static final String MAGIX_ORIGIN = "axsis-tango";
 
     static {
-        Client client = ResteasyClientBuilder.newClient();
+        ResteasyJackson2Provider jacksonProvider = new ResteasyJackson2Provider();
+
+        Client client = ResteasyClientBuilder.newClient().register(jacksonProvider);
 
         MAGIX = new SseMagixClient("http://" + System.getProperty("MAGIX_HOST", "localhost:8080"), client);
     }
