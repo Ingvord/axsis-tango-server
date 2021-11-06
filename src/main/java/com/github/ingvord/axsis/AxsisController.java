@@ -14,6 +14,7 @@ import org.tango.utils.DevFailedUtils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -56,25 +57,29 @@ public class AxsisController {
     }
 
     @Command
-    public void move(DevVarDoubleStringArray values){
-        AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
-                Message.builder()
-                        .setId(System.currentTimeMillis())
-                        .setOrigin(AxsisTangoServer.MAGIX_ORIGIN)
-                        .setTarget(AxsisTangoServer.MAGIX_TARGET)
-                        .addPayload(new AxsisMessage()
-                            .withIp(this.host)
-                            .withPort(this.port)
-                            .withAction("MOV")
-                            .withValue(
-                                    Observable.zip(
-                                        Observable.fromArray(values.svalue),
-                                        Observable.fromArray(DoubleStream.of(values.dvalue).boxed().toArray(Double[]::new)),
-                                        Map::entry
-                                    ).toMap(Map.Entry::getKey, Map.Entry::getValue).blockingGet()
+    public void move(DevVarDoubleStringArray values) throws DevFailed{
+        try {
+            AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
+                    Message.builder()
+                            .setId(System.currentTimeMillis())
+                            .setOrigin(AxsisTangoServer.MAGIX_ORIGIN)
+                            .setTarget(AxsisTangoServer.MAGIX_TARGET)
+                            .addPayload(new AxsisMessage()
+                                .withIp(this.host)
+                                .withPort(this.port)
+                                .withAction("MOV")
+                                .withValue(
+                                        Observable.zip(
+                                            Observable.fromArray(values.svalue),
+                                            Observable.fromArray(DoubleStream.of(values.dvalue).boxed().toArray(Double[]::new)),
+                                            Map::entry
+                                        ).toMap(Map.Entry::getKey, Map.Entry::getValue).blockingGet()
+                                )
                             )
-                        )
-                        .build());
+                            .build()).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw DevFailedUtils.newDevFailed(e);
+        }
     }
 
     public void setManager(DeviceManager manager){
