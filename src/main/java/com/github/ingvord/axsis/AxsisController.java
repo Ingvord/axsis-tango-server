@@ -56,15 +56,15 @@ public class AxsisController {
         return port;
     }
 
-    @Command
+    @Command(name = "Move")
     public void move(DevVarDoubleStringArray values) throws DevFailed{
         try {
             AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
-                    Message.builder()
-                            .setId(System.currentTimeMillis())
-                            .setOrigin(AxsisTangoServer.MAGIX_ORIGIN)
-                            .setTarget(AxsisTangoServer.MAGIX_TARGET)
-                            .addPayload(new AxsisMessage()
+                    new Message<AxsisMessage>()
+                            .withId(System.currentTimeMillis())
+                            .withOrigin(AxsisTangoServer.MAGIX_ORIGIN)
+                            .withTarget(AxsisTangoServer.MAGIX_TARGET)
+                            .withPayload(new AxsisMessage()
                                 .withIp(this.host)
                                 .withPort(this.port)
                                 .withAction("MOV")
@@ -75,8 +75,7 @@ public class AxsisController {
                                             Map::entry
                                         ).toMap(Map.Entry::getKey, Map.Entry::getValue).blockingGet()
                                 )
-                            )
-                            .build()).get();
+                            )).get();//Tango does not support async response anyway
         } catch (InterruptedException | ExecutionException e) {
             throw DevFailedUtils.newDevFailed(e);
         }
