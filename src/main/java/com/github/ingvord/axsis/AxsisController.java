@@ -65,13 +65,14 @@ public class AxsisController {
         AxsisMessage message = new AxsisMessage();
 
         Transaction txn = ElasticApm.startTransaction();
-        txn.setName("magix");
-        Span span = txn.startSpan();
-        span.setName("axsis-tango");
+        txn.setName("move-from-tango");
         txn.injectTraceHeaders((headerName, headerValue) -> {
             if(headerName.equalsIgnoreCase("traceparent"))
                 message.withTraceparent(headerValue);
         });
+
+        Span span = txn.startSpan();
+        span.setName("axsis-tango");
         try {
             AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
                     new Message<AxsisMessage>()
