@@ -11,7 +11,7 @@ WORKDIR /app
 
 ENV JAVA_TOOL_OPTIONS="-javaagent:/app/elastic-apm-agent-1.32.0.jar \
                        -Delastic.apm.service_name=axsis-tango \
-                       -Delastic.apm.server_urls=http://helm-apm-server-default-apm-server.kube-system.svc.cluster.local:8200 \
+                       -Delastic.apm.server_urls=$APM_SERVER_URL \
                        -Delastic.apm.secret_token= \
                        -Delastic.apm.environment=production \
                        -Delastic.apm.application_packages=com.github.ingvord.axsis"
