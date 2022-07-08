@@ -1,5 +1,7 @@
 package com.github.ingvord.axsis;
 
+import co.elastic.apm.api.Span;
+import co.elastic.apm.api.Transaction;
 import fr.esrf.Tango.DevFailed;
 import fr.esrf.Tango.DevVarDoubleStringArray;
 import io.reactivex.Observable;
@@ -18,6 +20,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+
+import co.elastic.apm.api.ElasticApm;
 
 @Device(transactionType = TransactionType.NONE)
 public class AxsisController {
@@ -58,6 +62,10 @@ public class AxsisController {
 
     @Command(name = "Move")
     public void move(DevVarDoubleStringArray values) throws DevFailed{
+        Transaction txn = ElasticApm.startTransaction();
+        txn.setName("magix");
+        Span span = txn.startSpan();
+        span.setName("axsis-tango");
         try {
             AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
                     new Message<AxsisMessage>()
@@ -77,7 +85,11 @@ public class AxsisController {
                                 )
                             )).get();//Tango does not support async response anyway
         } catch (InterruptedException | ExecutionException e) {
+            span.captureException(e);
+            txn.captureException(e);
             throw DevFailedUtils.newDevFailed(e);
+        } finally {
+            span.end();
         }
     }
 

@@ -11,6 +11,7 @@
         <github.organization>ingvord</github.organization>
         <github.repo>axsis-tango-server</github.repo>
         <main.class>com.github.ingvord.axsis.AxsisTangoServer</main.class>
+        <elastic-apm.version>1.32.0</elastic-apm.version>
     </properties>
 
     <scm>
@@ -63,6 +64,11 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
             <version>4.5.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-api</artifactId>
+            <version>${elastic-apm.version}</version>
         </dependency>
     </dependencies>
     <build>
