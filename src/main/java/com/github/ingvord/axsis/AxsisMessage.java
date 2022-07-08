@@ -6,6 +6,7 @@ public class AxsisMessage {
     public String ip;
     public String port;
     public String action;
+    public String traceparent;
     public Map<String, Double> value;
 
     public AxsisMessage withIp(String v){
@@ -27,4 +28,9 @@ public class AxsisMessage {
         this.value = v;
         return this;
     }
- }
+
+    public AxsisMessage withTraceparent(String v) {
+        this.traceparent =  v;
+        return this;
+    }
+}

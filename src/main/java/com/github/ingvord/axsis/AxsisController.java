@@ -62,21 +62,28 @@ public class AxsisController {
 
     @Command(name = "Move")
     public void move(DevVarDoubleStringArray values) throws DevFailed{
+        AxsisMessage message = new AxsisMessage();
+
         Transaction txn = ElasticApm.startTransaction();
         txn.setName("magix");
         Span span = txn.startSpan();
         span.setName("axsis-tango");
+        txn.injectTraceHeaders((headerName, headerValue) -> {
+            if(headerName.equalsIgnoreCase("traceparent"))
+                message.withTraceparent(headerValue);
+        });
         try {
             AxsisTangoServer.getMagixClient().broadcast(AxsisTangoServer.MAGIX_CHANNEL,
                     new Message<AxsisMessage>()
                             .withId(System.currentTimeMillis())
                             .withOrigin(AxsisTangoServer.MAGIX_ORIGIN)
                             .withTarget(AxsisTangoServer.MAGIX_TARGET)
-                            .withPayload(new AxsisMessage()
-                                .withIp(this.host)
-                                .withPort(this.port)
-                                .withAction("MOV")
-                                .withValue(
+                            .withPayload(
+                                message
+                                    .withIp(this.host)
+                                    .withPort(this.port)
+                                    .withAction("MOV")
+                                    .withValue(
                                         Observable.zip(
                                             Observable.fromArray(values.svalue),
                                             Observable.fromArray(DoubleStream.of(values.dvalue).boxed().toArray(Double[]::new)),
@@ -90,6 +97,7 @@ public class AxsisController {
             throw DevFailedUtils.newDevFailed(e);
         } finally {
             span.end();
+            txn.end();
         }
     }
 
