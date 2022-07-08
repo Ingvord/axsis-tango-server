@@ -5,9 +5,16 @@ MAINTAINER mail@ingvord.ru
 ARG JAR_FILE
 ADD ${JAR_FILE} /app/bin/run.jar
 
+COPY elastic-apm-agent-1.32.0.jar /app/
+
 WORKDIR /app
 
-ENV JAVA_TOOL_OPTIONS=""
+ENV JAVA_TOOL_OPTIONS="-javaagent:/app/elastic-apm-agent-1.32.0.jar \
+                       -Delastic.apm.service_name=axsis-tango \
+                       -Delastic.apm.server_urls=http://helm-apm-server-default-apm-server.kube-system.svc.cluster.local:8200 \
+                       -Delastic.apm.secret_token= \
+                       -Delastic.apm.environment=production \
+                       -Delastic.apm.application_packages=com.github.ingvord.axsis"
 ENV TANGO_HOST=localhost:10000
 ENV MAGIX_HOST=localhost:8080
 ENV OAPORT=30100
