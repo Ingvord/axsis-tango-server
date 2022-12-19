@@ -1,11 +1,14 @@
 package com.github.ingvord.axsis;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Map;
 
 public class AxsisMessage {
     public String ip;
     public String port;
     public String action;
+    @JsonIgnore
     public String traceparent;
     public Map<String, Double> value;
 

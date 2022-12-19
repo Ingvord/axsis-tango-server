@@ -155,7 +155,7 @@
                         <jvmFlags>
                             <jvmFlag>-DOAPort=30100</jvmFlag>
                             <jvmFlag>-DTANGO_HOST=localhost:10000</jvmFlag>
-                            <jvmFlag>-DMAGIX_HOST=localhost:8080</jvmFlag>
+                            <jvmFlag>-DMAGIX_HOST=magix:8080</jvmFlag>
                             <jvmFlag>-DCTRL1=1.1.1.1:1234</jvmFlag>
                             <jvmFlag>-DCTRL2=1.1.1.2:1234</jvmFlag>
                         </jvmFlags>
