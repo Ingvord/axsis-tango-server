@@ -1,5 +1,7 @@
 package com.github.ingvord.axsis;
 
+import co.elastic.apm.api.ElasticApm;
+import co.elastic.apm.attach.ElasticApmAttacher;
 import magix.SseMagixClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.plugins.providers.jackson.ResteasyJackson2Provider;
@@ -20,7 +22,7 @@ public class AxsisTangoServer {
 
         Client client = ResteasyClientBuilder.newClient().register(jacksonProvider);
 
-        MAGIX = new SseMagixClient("http://" + System.getProperty("MAGIX_HOST", "localhost:8080"), client);
+        MAGIX = new SseMagixClient("http://" + System.getenv("MAGIX_HOST"), client);
     }
 
     public static void main(String[] args) {
